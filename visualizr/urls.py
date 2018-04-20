@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from rest_framework.routers import DefaultRouter
 
-from Main.views import ObjectView, main
+from Main.views import objectView, main
 
 # router = DefaultRouter()
 # router.register(r'api/main', ObjectView, base_name='api_main')
@@ -26,7 +26,7 @@ from Main.views import ObjectView, main
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path('api/', include((router.urls, 'api'), namespace='api')),
-    re_path(r'^api/(?P<name>\w+)/$', ObjectView.as_view()),
+    path(r'^api/extract', objectView),
     path('', main),
 
 
