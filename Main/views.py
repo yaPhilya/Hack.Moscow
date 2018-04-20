@@ -22,7 +22,7 @@ def main(request):
 
 
 def objectView(request):
-    text = request.body['text']
+    text = json.loads(str(request.body))
 
     ###########
     # parse text here

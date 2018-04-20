@@ -26,7 +26,7 @@ from Main.views import objectView, main
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path('api/', include((router.urls, 'api'), namespace='api')),
-    path(r'^api/extract', objectView),
+    path('api/extract', objectView),
     path('', main),
 
 
