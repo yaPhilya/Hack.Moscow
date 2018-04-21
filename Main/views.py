@@ -1,13 +1,14 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 # from rest_framework.viewsets import ReadOnlyModelViewSet
+from Main.TextParser import TextParser
 from Main.models import Object
 from Main.serializers import ObjectSerializer
 from rest_framework import generics
 import json
 
-#
 # class ObjectView(generics.ListAPIView):
+
 #     serializer_class = ObjectSerializer
 #     object = Object
 #
@@ -24,13 +25,8 @@ def main(request):
 def objectView(request):
     text = json.loads(str(request.body))
 
-    ###########
-    # parse text here
-    ###########
-
-    data = {}
-    data["model_path"] = "aaaa"
-    data["effects"] = [{"color": 1}, {"color": 2}]
-    jsonData = json.dumps(data)
+    text_parser = TextParser(Object.objects.all().name,
+                             Object.objects.all().path)
+    jsonData = text_parser.get_real_synonymous(text)
 
     return HttpResponse(jsonData)
