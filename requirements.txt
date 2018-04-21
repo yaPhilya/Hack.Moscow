@@ -5,3 +5,4 @@ pymorphy2-dicts==2.4.393442.3710985
 webcolors==1.8.1
 Flask==0.12.2
 flask-script
+flask-cors==3.0.3
