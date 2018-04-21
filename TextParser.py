@@ -4,7 +4,7 @@ import webcolors
 
 class TextParser:
 
-    def __init__(self, stored_names, stored_paths):
+    def __init__(self):
         self.morph = pymorphy2.MorphAnalyzer()
         self.stored_names = {
             'яблоко': 'apple',
@@ -1104,9 +1104,10 @@ class TextParser:
             if noun not in self.stored_names.keys():
                 continue
             data.append({})
-            data[-1]['model_path'] = self.stored_paths[noun]
-            data[-1]['effects'] = {}
-            data[-1]['effects']['color'] = self.get_all_colors(line['adj'])
-            data[-1]['coordinate'] = (0, 0, 0)
+            data[-1]['name'] = self.stored_paths[noun]
+            data[-1]['color'] = self.get_all_colors(line['adj'])
+            data[-1]['x'] = 0
+            data[-1]['y'] = 0
+            data[-1]['z'] = 0
 
         return json.dumps(data)
