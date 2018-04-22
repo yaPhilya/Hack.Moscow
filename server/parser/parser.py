@@ -1068,7 +1068,7 @@ class TextParser:
         self.morph = pymorphy2.MorphAnalyzer()
 
     def parse(self, text):
-        text = [[self.morph.parse(word)[0].normal_form for word in line.split(' ')]
+        text = [[self.morph.parse(word)[0].normal_form.replace('ё', 'е') for word in line.split(' ')]
                 for line in text.split(',')]
         main_part = []
         for line in text:
