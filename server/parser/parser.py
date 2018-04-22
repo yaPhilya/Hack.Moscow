@@ -1073,7 +1073,7 @@ class TextParser:
 
     def parse(self, text):
         regexpPattern = '|'.join(DELIMS)
-        text = [[self.morph.parse(word)[0].normal_form for word in line.strip().split(' ')]
+        text = [[self.morph.parse(word)[0].normal_form.replace('ё', 'е') for word in line.split(' ')]
                 for line in re.split(regexpPattern, text)]
         main_part = []
         for line in text:
