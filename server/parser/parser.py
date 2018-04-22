@@ -1108,7 +1108,7 @@ class TextParser:
         delimeters = ['']
         delimeters.extend(re.findall(regexpPattern, text))
         data = []
-        left, right, up, down, front, back = 0
+        left, right, up, down, front, back = 0, 0, 0, 0, 0, 0
         for line, d in zip(extract, delimeters):
             noun = line['noun']
             if noun not in _STORED_NAMES.keys():
