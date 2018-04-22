@@ -1,7 +1,0 @@
-version: '3'
-services:
-  server:
-    image: strangeducttape/bluecat_backend
-    ports:
-      - "5000:5000"
-    command: "gunicorn --bind 0.0.0.0:5000 server.production:app --log-file -"
