@@ -7,3 +7,4 @@ Flask==0.12.2
 flask-script
 flask-cors==3.0.3
 gunicorn==19.7.1
+numpy-stl

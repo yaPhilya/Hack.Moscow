@@ -1,9 +1,8 @@
 import json
+import re
 
 import pymorphy2
-
-import re
-#import stl
+import stl
 
 _STORED_NAMES = {
     'яблоко': 'apple',
@@ -1064,7 +1063,39 @@ _COLOR_MAP = {
     'ярко-синий': '#007CAD',
     'ярко-сиреневый': '#E0B0FF',
     'ярко-фиолетовый': '#CD00CD'}
-DELIMS = ['на', 'под', 'за', 'перед', 'слева', 'справа']
+_DELIMS = ['на', 'под', 'за', 'перед', 'слева', 'справа']
+
+_BOUNDING_BOXES = {
+    'apple': {
+        'dx': 66,
+        'dy': 76,
+        'dz': 68,
+    },
+    'armchair': {
+        'dx': 16,
+        'dy': 2.5,
+        'dz': 16,
+    },
+    'bear': {
+        'dx': 2,
+        'dy': 3,
+        'dz': 4.5,
+    },
+    'bottle': {
+        'dx': 53,
+        'dy': 86,
+        'dz': 27,
+    }
+}
+
+
+
+def get_bounding_boxes(name: str):
+    return _BOUNDING_BOXES.get(name, default={
+        'dx': 100,
+        'dy': 100,
+        'dz': 100,
+    })
 
 
 class TextParser:
@@ -1072,7 +1103,7 @@ class TextParser:
         self.morph = pymorphy2.MorphAnalyzer()
 
     def parse(self, text):
-        regexpPattern = '|'.join(DELIMS)
+        regexpPattern = '|'.join(_DELIMS)
         text = [[self.morph.parse(word)[0].normal_form.replace('ё', 'е') for word in line.split(' ')]
                 for line in re.split(regexpPattern, text)]
         main_part = []
@@ -1104,7 +1135,7 @@ class TextParser:
         return reduced extract with noun that compare to models
         """
         extract = self.parse(text)
-        regexpPattern = '|'.join(DELIMS)
+        regexpPattern = '|'.join(_DELIMS)
         delimeters = ['']
         delimeters.extend(re.findall(regexpPattern, text))
         data = []
