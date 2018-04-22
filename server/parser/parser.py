@@ -1125,23 +1125,23 @@ class TextParser:
                 back += 100
             elif d == 'на':
                 data[-1]['x'] = 0
-                data[-1]['y'] = 0
-                data[-1]['z'] = -down - 100
+                data[-1]['y'] = -down - 100
+                data[-1]['z'] = 0
                 down -= 100
             elif d == 'под':
                 data[-1]['x'] = 0
-                data[-1]['y'] = 0
-                data[-1]['z'] = up
+                data[-1]['y'] = up
+                data[-1]['z'] = 0
                 up += 100
             elif d == 'за':
                 data[-1]['x'] = 0
-                data[-1]['y'] = front + 100
-                data[-1]['z'] = 0
+                data[-1]['y'] = 0
+                data[-1]['z'] = front + 100
                 front += 100
             elif d == 'перед':
                 data[-1]['x'] = 0
-                data[-1]['y'] = -back
-                data[-1]['z'] = 0
+                data[-1]['y'] = 0
+                data[-1]['z'] = -back
                 back += 100
             elif d == 'слева':
                 data[-1]['x'] = -left - 100
