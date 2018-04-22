@@ -2,10 +2,10 @@
 
 ## Использование
 ```bash
-docker-compose up
+python manage.py runserver
 ```
 
-В соседнем терминале из этой же директории один раз
+## Деплой
 ```bash
-docker-compose exec web python manage.py migrate
+./deploy.sh
 ```
