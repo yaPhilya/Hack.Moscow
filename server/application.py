@@ -4,8 +4,9 @@ from flask_cors import CORS
 cors = CORS()
 
 
-def create_app() -> Flask:
+def create_app(settings='server.config.Development') -> Flask:
     app = Flask(__name__)
+    app.config.from_object(settings)
 
     # Set pre- and post- routes
     @app.before_request
