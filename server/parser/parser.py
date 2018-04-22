@@ -2,6 +2,9 @@ import json
 
 import pymorphy2
 
+import re
+#import stl
+
 _STORED_NAMES = {
     'яблоко': 'apple',
     'кресло': 'armchair',
@@ -27,7 +30,7 @@ _STORED_NAMES = {
     'жираф': 'giraffe',
     'дом': 'house',
     'кружка': 'mug',
-    'оранжевый': 'orange',
+    'апельсин': 'orange',
     'свинья': 'pig',
     'подушка': 'pillow',
     'носорог': 'rhino',
@@ -37,7 +40,7 @@ _STORED_NAMES = {
     'пар': 'streamLocomotive',
     'таблица': 'table',
     'бак': 'tank',
-    'чушка': 'teeCup',
+    'чашка': 'teeCup',
     'дерево': 'tree',
     'деревья': 'trees',
     'трицератопс': 'triceratops',
@@ -1061,6 +1064,7 @@ _COLOR_MAP = {
     'ярко-синий': '#007CAD',
     'ярко-сиреневый': '#E0B0FF',
     'ярко-фиолетовый': '#CD00CD'}
+DELIMS = ['на', 'под', 'за', 'перед', 'слева', 'справа']
 
 
 class TextParser:
@@ -1068,8 +1072,9 @@ class TextParser:
         self.morph = pymorphy2.MorphAnalyzer()
 
     def parse(self, text):
+        regexpPattern = '|'.join(DELIMS)
         text = [[self.morph.parse(word)[0].normal_form.replace('ё', 'е') for word in line.split(' ')]
-                for line in text.split(',')]
+                for line in re.split(regexpPattern, text)]
         main_part = []
         for line in text:
             main_part.append({'noun': 'none', 'adj': []})
@@ -1095,18 +1100,58 @@ class TextParser:
         return '#000000'
 
     def get_real_synonymous(self, text):
-        '''return reduced extract with noun that compare to models'''
+        """
+        return reduced extract with noun that compare to models
+        """
         extract = self.parse(text)
+        regexpPattern = '|'.join(DELIMS)
+        delimeters = ['']
+        delimeters.extend(re.findall(regexpPattern, text))
         data = []
-        for line in extract:
+        left, right, up, down, front, back = 0, 0, 0, 0, 0, 0
+        for line, d in zip(extract, delimeters):
             noun = line['noun']
             if noun not in _STORED_NAMES.keys():
                 continue
             data.append({})
             data[-1]['name'] = _STORED_NAMES[noun]
             data[-1]['color'] = self.get_all_colors(line['adj'])
-            data[-1]['x'] = 0
-            data[-1]['y'] = 0
-            data[-1]['z'] = 0
+            if d == '':
+                data[-1]['x'] = 0
+                data[-1]['y'] = 0
+                data[-1]['z'] = 0
+                right += 100
+                up += 100
+                back += 100
+            elif d == 'на':
+                data[-1]['x'] = 0
+                data[-1]['y'] = -down - 100
+                data[-1]['z'] = 0
+                down -= 100
+            elif d == 'под':
+                data[-1]['x'] = 0
+                data[-1]['y'] = up
+                data[-1]['z'] = 0
+                up += 100
+            elif d == 'за':
+                data[-1]['x'] = 0
+                data[-1]['y'] = 0
+                data[-1]['z'] = front + 100
+                front += 100
+            elif d == 'перед':
+                data[-1]['x'] = 0
+                data[-1]['y'] = 0
+                data[-1]['z'] = -back
+                back += 100
+            elif d == 'слева':
+                data[-1]['x'] = -left - 100
+                data[-1]['y'] = 0
+                data[-1]['z'] = 0
+                left += 100
+            elif d == 'справа':
+                data[-1]['x'] = right
+                data[-1]['y'] = 0
+                data[-1]['z'] = 0
+                right += 100
 
         return json.dumps(data)
